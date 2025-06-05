@@ -1,4 +1,8 @@
 #include <iostream>
+#include <vector>
+#include <string>
+#include <utility>
+#include <cmath>
 
 class ClimbingStairs
 {
@@ -16,6 +20,26 @@ public:
         }
 
         return next1;
+    }
+};
+
+class Rob
+{
+public:
+    int solve(const std::vector<int> &houses)
+    {
+        if (houses.empty())
+            return 0;
+        if (houses.size() == 1)
+            return houses.front();
+        std::vector<int> dp(houses.size(), 0);
+        dp[0] = houses[0];
+        dp[1] = std::max(houses[0], houses[1]);
+
+        for (int i = 2; i < houses.size(); ++i)
+            dp[i] = std::max(houses[i] + dp[i - 2], dp[i - 1]);
+
+        return dp.back();
     }
 };
 
