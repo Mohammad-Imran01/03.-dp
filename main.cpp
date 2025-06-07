@@ -43,13 +43,39 @@ public:
     }
 };
 
+class HouseRobber2
+{
+    int solve(const std::vector<int> &nums, int beg, int end)
+    {
+        std::vector<int> dp(nums.size(), 0);
+
+        dp[beg] = nums[beg];
+        dp[beg + 1] = std::max(nums[beg], nums[beg + 1]);
+
+        for (int i = beg + 2; i < end; ++i)
+            dp[i] = std::max(nums[i] + dp[i - 2], dp[i - 1]);
+
+        return dp[end - 1];
+    }
+
+public:
+    int Rob(const std::vector<int> &nums)
+    {
+        if (nums.empty())
+            return 0;
+        if (nums.size() == 1)
+            return nums.front();
+        if (nums.size() == 2)
+            return std::max(nums.front(), nums.back());
+
+        return std::max(solve(nums, 0, nums.size() - 1), solve(nums, 1, nums.size()));
+    }
+};
+
 int main()
 {
     std::cout << "\nHello, world!\n";
     //----------------------------------------------------
-    ClimbingStairs climb;
-
-    std::cout << climb.solve(3);
 
     //----------------------------------------------------
     std::cout << "\n/************************************/\n";
