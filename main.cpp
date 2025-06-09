@@ -75,10 +75,49 @@ public:
 
 class UniquePaths2D
 {
-private:
+public:
     const int MAX_LEN = 102;
     int **dp;
+    int m, n;
     UniquePaths2D()
+    {
+        dp = new int *[MAX_LEN];
+        for (int i = 0; i < MAX_LEN; ++i)
+        {
+            dp[i] = new int[MAX_LEN];
+            std::fill(dp[i], dp[i] + MAX_LEN, -1);
+        }
+    }
+
+private:
+    int solveHelper(const std::vector<std::vector<int>> &grid, int i, int j)
+    {
+        if (i >= m || j >= n || grid[i][j])
+            return 0;
+        if (dp[i][j] != -1)
+            return dp[i][j];
+        if (i == m - 1 && j == n - 1)
+            return 1;
+        return dp[i][j] = solveHelper(grid, i + 1, j) +
+                          solveHelper(grid, i, j + 1);
+    }
+
+public:
+    int solve(const std::vector<std::vector<int>> &grid)
+    {
+        m = grid.size(),
+        n = grid.front().size();
+
+        return solveHelper(grid, 0, 0);
+    }
+};
+
+class UniqueObstaclePaths2D
+{
+public:
+    const int MAX_LEN = 102;
+    int **dp;
+    UniqueObstaclePaths2D()
     {
         dp = new int *[MAX_LEN];
         for (int i = 0; i < MAX_LEN; ++i)
