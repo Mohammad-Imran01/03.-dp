@@ -3,6 +3,7 @@
 #include <string>
 #include <utility>
 #include <cmath>
+#include <algorithm>
 
 class ClimbingStairs
 {
@@ -69,6 +70,41 @@ public:
             return std::max(nums.front(), nums.back());
 
         return std::max(solve(nums, 0, nums.size() - 1), solve(nums, 1, nums.size()));
+    }
+};
+
+class UniquePaths2D
+{
+private:
+    const int MAX_LEN = 102;
+    int **dp;
+    UniquePaths2D()
+    {
+        dp = new int *[MAX_LEN];
+        for (int i = 0; i < MAX_LEN; ++i)
+        {
+            dp[i] = new int[MAX_LEN];
+            std::fill(dp[i], dp[i] + MAX_LEN, -1);
+        }
+    }
+
+private:
+    int solveHelper(int m, int n, int i, int j)
+    {
+        if (i > m || j > n)
+            return 0;
+        if (dp[i][j] != -1)
+            return dp[i][j];
+        if (i == m && j == n)
+            return 1;
+        return dp[i][j] = solveHelper(m, n, i + 1, j) +
+                          solveHelper(m, n, i, j + 1);
+    }
+
+public:
+    int solve(int m, int n)
+    {
+        return solveHelper(m, n, 1, 1);
     }
 };
 
