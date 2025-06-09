@@ -147,6 +147,55 @@ public:
     }
 };
 
+class MinPathSum2D
+{
+public:
+    int MAX_LEN;
+    int **dp;
+    int m, n;
+    ~MinPathSum2D()
+    {
+        for (int i = 0; i < MAX_LEN; ++i)
+            delete[] dp[i];
+    }
+
+private:
+    int solveHelper(const std::vector<std::vector<int>> &grid, int i, int j)
+    {
+        if (i >= m || j >= n)
+            return 1e8;
+        if (dp[i][j] != -1)
+            return dp[i][j];
+        if (i == m - 1 && j == n - 1)
+            return grid[i][j];
+        int right = 1e8, down = 1e8;
+
+        if (i + 1 < m)
+            down = solveHelper(grid, i + 1, j);
+        if (j + 1 < n)
+            right = solveHelper(grid, i, j + 1);
+
+        return dp[i][j] = grid[i][j] + std::min(right, down);
+    }
+
+public:
+    int solve(const std::vector<std::vector<int>> &grid)
+    {
+        m = grid.size(),
+        n = grid.front().size();
+
+        MAX_LEN = std::max(m, n) + 1;
+
+        dp = new int *[MAX_LEN];
+        for (int i = 0; i < MAX_LEN; ++i)
+        {
+            dp[i] = new int[MAX_LEN];
+            std::fill(dp[i], dp[i] + MAX_LEN, -1);
+        }
+        return solveHelper(grid, 0, 0);
+    }
+};
+
 int main()
 {
     std::cout << "\nHello, world!\n";
