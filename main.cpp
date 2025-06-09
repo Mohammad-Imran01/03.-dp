@@ -150,7 +150,7 @@ public:
 class MinPathSum2D
 {
 public:
-    int MAX_LEN;
+    int MAX_LEN=0;
     int **dp;
     int m, n;
     ~MinPathSum2D()
