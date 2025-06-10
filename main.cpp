@@ -150,7 +150,7 @@ public:
 class MinPathSum2D
 {
 public:
-    int MAX_LEN=0;
+    int MAX_LEN = 0;
     int **dp;
     int m, n;
     ~MinPathSum2D()
@@ -193,6 +193,32 @@ public:
             std::fill(dp[i], dp[i] + MAX_LEN, -1);
         }
         return solveHelper(grid, 0, 0);
+    }
+};
+
+class MinPathSumTriangle
+{
+public:
+    int solve(std::vector<std::vector<int>> &tri)
+    {
+        const int len = tri.size();
+
+        std::vector<int> dp(len, 1e8);
+        dp.front() = tri.front().front();
+
+        for (int i = 1; i < len; ++i)
+        {
+            auto temp = std::vector<int>(len, 1e8);
+            for (int j = 0; j <= i; ++j)
+            {
+                int
+                    left = (j - 1 >= 0) ? dp[j - 1] : 1e8,
+                    mid = (j < i) ? dp[j] : 1e8;
+                temp[j] = tri[i][j] + std::min(left, mid);
+            }
+            dp = temp;
+        }
+        return *std::min_element(dp.begin(), dp.end());
     }
 };
 
