@@ -222,6 +222,29 @@ public:
     }
 };
 
+class FallingPathSum2D
+{
+public:
+    int solve(std::vector<std::vector<int>> mat)
+    {
+        const int len = mat.size();
+
+        for (int i = 1; i < len; ++i)
+        {
+            for (int j = 0; j < len; ++j)
+            {
+                int left = j - 1 >= 0 ? mat[i - 1][j - 1] : 1e8;
+                int up = mat[i - 1][j];
+                int right = j + 1 < mat.size() ? mat[i - 1][j + 1] : 1e8;
+
+                mat[i][j] += std::min(left, std::min(up, right));
+            }
+        }
+
+        return *std::min_element(mat[len - 1].begin(), mat[len - 1].end());
+    }
+};
+
 int main()
 {
     std::cout << "\nHello, world!\n";
