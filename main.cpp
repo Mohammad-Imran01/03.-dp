@@ -4,6 +4,9 @@
 #include <utility>
 #include <cmath>
 #include <algorithm>
+#include <memory>
+#include <cmath>
+#include <numeric>
 
 class ClimbingStairs
 {
@@ -242,6 +245,48 @@ public:
         }
 
         return *std::min_element(mat[len - 1].begin(), mat[len - 1].end());
+    }
+};
+
+class PartitionEqualSum
+{
+
+    int **dp = nullptr;
+    bool help(const std::vector<int> &nums, int ind, int target)
+    {
+        if (ind >= nums.size() || target < 0)
+            false;
+        if (!target || nums[ind] == target)
+            return true;
+        if (dp[ind][target] != -1)
+            return dp[ind][target];
+        if (help(nums, ind + 1, target - nums[ind]))
+            return true;
+        if (help(nums, ind + 1, target))
+            return true;
+        return false;
+    }
+
+public:
+    bool solve(const std::vector<int> &nums)
+    {
+        int sum = std::accumulate(nums.cbegin(), nums.cend(), 0);
+
+        // odd sum cant be partitioned
+        if (sum % 2)
+            return false;
+
+        dp = new int *[nums.size()];
+
+        for (int i = 0; i < nums.size(); ++i)
+        {
+            int *temp = new int[sum + 1];
+            std::fill(temp, temp + sum + 1, -1);
+            dp[i] = temp;
+            temp = nullptr;
+        }
+
+        return help(nums, 0, sum / 2);
     }
 };
 
