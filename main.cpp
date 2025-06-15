@@ -290,6 +290,61 @@ public:
     }
 };
 
+class MinCoinSum
+{
+    int **memo = nullptr;
+    int help(std::vector<int> &coins, int amount, int ind)
+    {
+        if (ind >= coins.size() || amount < 0)
+            return 1e8;
+        if (amount == 0)
+            return 0;
+
+        if (memo[ind][amount] != -1)
+            return memo[ind][amount];
+
+        // 1 ignore
+        // 2.a take and go to same again
+        // 2.b take and next ind
+        int ignore = 1e8;
+        int takeSame = 1e8;
+        int takeNext = 1e8;
+
+        ignore = help(coins, amount, ind + 1);
+        if (coins[ind] <= amount)
+        {
+            takeSame = 1 + help(coins, amount - coins[ind], ind);
+            takeNext = 1 + help(coins, amount - coins[ind], ind + 1);
+        }
+        return memo[ind][amount] = std::min(
+                   ignore,
+                   std::min(
+                       takeSame,
+                       takeNext));
+    }
+
+public:
+    int coinChange(std::vector<int> &coins, int amount)
+    {
+        int len = coins.size();
+        memo = new int *[len];
+        for (int i = 0; i < len; ++i)
+        {
+            int *temp = new int[amount + 1];
+            std::fill(temp, temp + amount + 1, -1);
+            memo[i] = temp;
+            temp = nullptr;
+        }
+        int res = help(coins, amount, 0);
+
+        for (int i = 0; i < len; ++i)
+            delete[] memo[i];
+        delete[] memo;
+
+        return (res >= 1e8) ? -1 : res;
+    }
+};
+
 int main()
 {
     std::cout << "\nHello, world!\n";
