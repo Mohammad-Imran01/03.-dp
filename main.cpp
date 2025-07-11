@@ -91,6 +91,12 @@ public:
             std::fill(dp[i], dp[i] + MAX_LEN, -1);
         }
     }
+    ~UniquePaths2D()
+    {
+        for (int i = 0; i < MAX_LEN; ++i)
+            delete[] dp[i];
+        delete[] dp;
+    }
 
 private:
     int solveHelper(const std::vector<std::vector<int>> &grid, int i, int j)
