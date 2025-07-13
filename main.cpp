@@ -7,6 +7,11 @@
 #include <memory>
 #include <cmath>
 #include <numeric>
+#include <functional>
+#include <memory>
+
+typedef std::vector<int> VI1;
+typedef std::vector<VI1> VI2;
 
 class ClimbingStairs
 {
@@ -351,6 +356,31 @@ public:
     }
 };
 
+namespace SubSeq
+{
+    class SubsetSumEqualToK
+    {
+    public:
+        void solve(VI1 &arr, int K)
+        {
+            VI2 dp(arr.size() + 1, VI1(K + 1, 0));
+
+            for (int i = 0; i <= arr.size(); ++i)
+                dp[i][0] = true;
+
+            for (int i = 1; i <= arr.size(); ++i)
+            {
+                for (int targ = 1; targ <= K; ++targ)
+                {
+                    dp[i][targ] = dp[i - 1][targ] || (targ >= arr[i - 1]
+                                                          ? dp[i - 1][targ - arr[i - 1]]
+                                                          : 0);
+                }
+            }
+        }
+    };
+}
+
 int main()
 {
     std::cout << "\nHello, world!\n";
@@ -359,4 +389,4 @@ int main()
     //----------------------------------------------------
     std::cout << "\n/************************************/\n";
     return 0;
-}
+};

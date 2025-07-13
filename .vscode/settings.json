@@ -45,6 +45,10 @@
     "xstddef": "cpp",
     "xstring": "cpp",
     "xtr1common": "cpp",
-    "numeric": "cpp"
+    "numeric": "cpp",
+    "functional": "cpp",
+    "list": "cpp",
+    "unordered_map": "cpp",
+    "xhash": "cpp"
   }
 }
