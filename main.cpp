@@ -381,6 +381,37 @@ namespace SubSeq
     };
 }
 
+namespace knapsack
+{
+    class Knapsack01
+    {
+    public:
+        int solve(const VI1 &money, const VI1 &wt, int size)
+        {
+            VI1 dp(size + 1, 0);
+
+            for (int ind = 0; ind < money.size(); ind)
+                for (int w = size; w >= wt[ind]; --w)
+                    dp[w] = std::max(dp[w], dp[w - wt[ind]] + money[ind]);
+
+            return dp.back();
+        }
+    };
+    class KnapsackUnbounded
+    {
+        int solve(const VI1 &money, const VI1 &wt, int size)
+        {
+            VI1 dp(size + 1, 0);
+
+            for (int w = 0; w <= size; ++w)
+                for (int ind = 0; ind < money.size(); ++ind)
+                    dp[w] = std::max(dp[w], dp[w - wt[ind]] + money[ind]);
+
+            return dp.back();
+        }
+    };
+}
+
 int main()
 {
     std::cout << "\nHello, world!\n";
