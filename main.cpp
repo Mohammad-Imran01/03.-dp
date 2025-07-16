@@ -379,10 +379,6 @@ namespace SubSeq
             }
         }
     };
-}
-
-namespace knapsack
-{
     class Knapsack01
     {
     public:
@@ -408,6 +404,32 @@ namespace knapsack
                     dp[w] = std::max(dp[w], dp[w - wt[ind]] + money[ind]);
 
             return dp.back();
+        }
+    };
+    class RodCut
+    {
+    public:
+        int solve(const VI1 &prices)
+        {
+            const int len = prices.size();
+            VI2 dp(len + 1, VI1(len + 1, 0));
+
+            for (int i = 1; i <= len; ++i)
+            {
+                for (int size = 1; size <= len; ++size)
+                {
+                    if (size >= i)
+                    {
+                        dp[i][size] = std::max(
+                            dp[i - 1][size], prices[i - 1] + dp[i][size - i]);
+                    }
+                    else
+                    {
+                        dp[i][size] = dp[i - 1][size];
+                    }
+                }
+            }
+            return dp.back().back();
         }
     };
 }
