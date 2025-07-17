@@ -418,18 +418,38 @@ namespace SubSeq
             {
                 for (int size = 1; size <= len; ++size)
                 {
-                    if (size >= i)
-                    {
-                        dp[i][size] = std::max(
-                            dp[i - 1][size], prices[i - 1] + dp[i][size - i]);
-                    }
-                    else
-                    {
-                        dp[i][size] = dp[i - 1][size];
-                    }
+                    dp[i][size] = (size >= i)
+                                      ? std::max(
+                                            dp[i - 1][size],
+                                            prices[i - 1] + dp[i][size - i])
+                                      : dp[i - 1][size];
                 }
             }
             return dp.back().back();
+        }
+    };
+}
+
+namespace String
+{
+    class LCS
+    {
+        int solve(std::string t1, std::string t2)
+        {
+            int m = t1.size(), n = t2.size();
+            VI2 dp(m + 1, VI1(n + 1, 0));
+
+            for (int i = 1; i <= m; ++i)
+            {
+                for (int j = 0; j <= n; ++j)
+                {
+                    if (t1[i - 1] == t2[j - 1])
+                        dp[i][j] = 1 + dp[i - 1][j - 1];
+                    else
+                        dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+            return dp[m][n];
         }
     };
 }
