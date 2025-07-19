@@ -539,6 +539,34 @@ namespace String
             return dp.back().back();
         }
     };
+
+    class MinInsertToMakePalindrome
+    {
+    public:
+        int LPS(const std::string &str)
+        {
+            const int len = str.length();
+            VI2 dp(len + 1, VI1(len + 1, 0));
+
+            const std::string rev(str.crbegin(), str.crend());
+
+            for (int i = 1; i <= len; ++i)
+            {
+                for (int j = 1; j <= len; ++j)
+                {
+                    if (str[i - 1] == rev[j - 1])
+                        dp[i][j] = 1 + dp[i - 1][j - 1];
+                    else
+                        dp[i][j] = std::max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+            return dp.back().back();
+        }
+        int solve(std::string s)
+        {
+            return s.length() - LPS(s);
+        }
+    };
 }
 
 int main()
