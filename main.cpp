@@ -452,13 +452,78 @@ namespace String
             return dp[m][n];
         }
     };
+
+    class WildcardMatch
+    {
+        std::vector<std::vector<int>> dp;
+        bool func(const std::string &ptn, const std::string &str, int pInd, int ind)
+        {
+            if (pInd <= 0 && ind <= 0)
+                return true;
+            if (pInd <= 0)
+                return false;
+            if (ind <= 0)
+            {
+                for (int i = pInd; i > 0; --i)
+                    if (ptn[i - 1] != '*')
+                        return false;
+                return true;
+            }
+            if (dp[pInd][ind] != -1)
+                return dp[pInd][ind];
+
+            if (ptn[pInd - 1] == str[ind - 1] || ptn[pInd - 1] == '?')
+                return dp[pInd][ind] = func(ptn, str, pInd - 1, ind - 1);
+            else if (ptn[pInd - 1] == '*')
+                return dp[pInd][ind] = func(ptn, str, pInd - 1, ind) || func(ptn, str, pInd, ind - 1);
+
+            return dp[pInd][ind] = false;
+        }
+        bool loopBased(std::string ptn, std::string str)
+        {
+            int m = ptn.size(), n = str.size();
+            std::vector<std::vector<bool>> dp(m + 1, std::vector<bool>(n + 1, false));
+
+            dp[0][0] = true;
+
+            for (int i = 1; i <= m; ++i)
+                if (ptn[i - 1] == '*')
+                    dp[i][0] = dp[i - 1][0];
+                else
+                    break;
+
+            for (int i = 1; i <= m; ++i)
+            {
+                for (int j = 1; j <= n; ++j)
+                {
+                    if (ptn[i - 1] == str[j - 1] || ptn[i - 1] == '?')
+                        dp[i][j] = dp[i - 1][j - 1];
+                    else if (ptn[i - 1] == '*')
+                        dp[i][j] = dp[i - 1][j] || dp[i][j - 1];
+                    else
+                        dp[i][j] = false;
+                }
+            }
+            return dp[m][n];
+        }
+
+    public:
+        bool isMatching(const std::string &ptn, const std::string &str)
+        {
+            int m = ptn.size(), n = str.size();
+            dp.assign(m + 1, std::vector<int>(n + 1, -1));
+            return func(ptn, str, m, n);
+        }
+    };
 }
 
 int main()
 {
     std::cout << "\nHello, world!\n";
+    std::cout << "\n/************************************/\n";
     //----------------------------------------------------
-
+    String::WildcardMatch match;
+    std::cout << std::boolalpha << match.isMatching("aa?k", "aadk");
     //----------------------------------------------------
     std::cout << "\n/************************************/\n";
     return 0;
