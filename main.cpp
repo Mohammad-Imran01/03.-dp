@@ -543,11 +543,35 @@ namespace String
     class MinInsertToMakePalindrome
     {
     public:
-
         int solve(std::string s)
         {
             LongestPalindromicSubsequence lps;
             return s.length() - lps.solve(s);
+        }
+    };
+}
+
+namespace Stocks
+{
+    // buy one sell one;
+    class BuySellI
+    {
+    public:
+        int solve(const VI1 &stocks)
+        {
+            if (stocks.empty())
+                return 0;
+            int profit = 0;
+            int curr = stocks.front();
+
+            for (int i = 1; i < stocks.size(); ++i)
+            {
+                int cost = stocks.at(i) - curr;
+                profit = std::max(profit, stocks.at(i) - curr);
+                curr = std::min(curr, stocks[i]);
+            }
+
+            return profit;
         }
     };
 }
