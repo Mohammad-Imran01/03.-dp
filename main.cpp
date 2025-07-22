@@ -553,7 +553,7 @@ namespace String
 
 namespace Stocks
 {
-    // buy one sell one;
+    // buy one sell one(once);
     class BuySellI
     {
     public:
@@ -569,6 +569,26 @@ namespace Stocks
                 int cost = stocks.at(i) - curr;
                 profit = std::max(profit, stocks.at(i) - curr);
                 curr = std::min(curr, stocks[i]);
+            }
+
+            return profit;
+        }
+    };
+
+    // can buy/sell more than once, but still sell first then buy next stock.
+    class BuySellII
+    {
+    public:
+        int maxProfit(const VI1 &prices)
+        {
+            int profit = 0;
+
+            for (int i = 1; i < prices.size(); ++i)
+            {
+                if (prices[i] > prices[i - 1])
+                {
+                    profit += prices[i] - prices[i - 1];
+                }
             }
 
             return profit;
