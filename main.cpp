@@ -594,6 +594,37 @@ namespace Stocks
             return profit;
         }
     };
+    class BuySellIII
+    {
+        int help(const VI1 &stocks, int ind, int buyInd)
+        {
+            if (ind >= stocks.size() || stocks.size() < 0)
+                return 0;
+            if (buyInd < 0)
+            { // buy or not buy move to next
+                return std::max(
+                    -stocks[ind] + help(stocks, ind + 1, ind),
+                    help(stocks, ind + 1, -1));
+            }
+            else if (stocks[ind] >= stocks[buyInd])
+            { // sell or not sell move to next
+                int soldNoBuy = stocks[ind] + help(stocks, ind + 1, -1);
+                int soldBuy = -stocks[ind] + help(stocks, ind + 1, ind);
+                int notSold = help(stocks, ind + 1, buyInd);
+                auto vec = std::vector<int>({soldBuy, soldNoBuy, notSold});
+                return *std::max_element(vec.begin(), vec.end());
+            }
+            return 0;
+        }
+
+    public:
+        int solve(const VI1 &stocks)
+        {
+            if (stocks.empty())
+                return 0;
+            return help(stocks, 0, -1);
+        }
+    };
 }
 
 int main()
