@@ -594,25 +594,25 @@ namespace Stocks
             return profit;
         }
     };
+    // can buy/sell at max twice, but still sell first then buy next stock.
     class BuySellIII
     {
-        int help(const VI1 &stocks, int ind, int buyInd)
+        std::vector<std::vector<std::vector<long long>>> dp;
+        int help(const VI1 &stocks, int ind, bool buy, int left)
         {
-            if (ind >= stocks.size() || stocks.size() < 0)
+            if (ind >= stocks.size() || left < 0)
                 return 0;
-            if (buyInd < 0)
+            if (dp[ind][buy][left] != -1)
+                return dp[ind][buy][left];
+            if (buy)
             { // buy or not buy move to next
                 return std::max(
-                    -stocks[ind] + help(stocks, ind + 1, ind),
-                    help(stocks, ind + 1, -1));
-            }
-            else if (stocks[ind] >= stocks[buyInd])
-            { // sell or not sell move to next
-                int soldNoBuy = stocks[ind] + help(stocks, ind + 1, -1);
-                int soldBuy = -stocks[ind] + help(stocks, ind + 1, ind);
-                int notSold = help(stocks, ind + 1, buyInd);
-                auto vec = std::vector<int>({soldBuy, soldNoBuy, notSold});
-                return *std::max_element(vec.begin(), vec.end());
+                    -stocks[ind] + help(stocks, ind + 1, false, left),
+                    help(stocks, ind + 1, true, left));
+            } else  { // sell or not sell move to next
+                return std::max(
+                    stocks[ind] + help(stocks, ind + 1, true, left - 1),
+                    help(stocks, ind + 1, false, left));
             }
             return 0;
         }
@@ -622,7 +622,9 @@ namespace Stocks
         {
             if (stocks.empty())
                 return 0;
-            return help(stocks, 0, -1);
+            const int len = stocks.size();
+            dp.assign(len, std::vector<std::vector<long long>>(2, std::vector<long long>(3, -1)));
+            return help(stocks, 0, true, 2);
         }
     };
 }
